@@ -26,6 +26,8 @@ ENV LC_ALL en_US.UTF-8
 ARG USER_NAME=yob
 ARG HOST_UID=1000
 ARG HOST_GID=1000
+ARG GIT_USER_NAME="dummyName"
+ARG GIT_EMAIL="dummy@email.com"
 
 # Add the user to the image's linux:
 #RUN echo -e "Runing with:\n * USER_NAME: ${USER_NAME}\n * HOST_GID: ${HOST_GID}\n * HOST_UID: ${HOST_UID}\n"
@@ -44,28 +46,8 @@ RUN chmod a+x $USER_FOLDER/bin/repo
 
 # Configures image's linux git config:
 # TODO: could be passed also by ARGs during the build.
-RUN git config --global user.email "email"
-RUN git config --global user.name "name"
+RUN git config --global user.email "$GIT_USER_NAME"
+RUN git config --global user.name "$GIT_EMAIL"
 
 WORKDIR $USER_FOLDER/agl
 
-
-## To build image:
-#sudo docker build \
-#--build-arg USER_NAME=$USER \
-#--build-arg HOST_UID=`id -u` \
-#--build-arg HOST_GID=`id -g` \
-#-t agl:latest .
-
-## To run container:
-#rm -rf out && \
-#mkdir out && \
-#sudo docker run -it \
-#-v /home/$USER/docker2/out:/home/$USER/agl \
-#agl:latest
-
-## To run the build (from inside the container):
-#./../bin/repo init -b icefish -u https://gerrit.automotivelinux.org/gerrit/AGL/AGL-repo && \
-#./../bin/repo sync && \
-#source meta-agl/scripts/aglsetup.sh -m raspberrypi4 agl-demo agl-appfw-smack && \
-#bitbake agl-demo-platform
