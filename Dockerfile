@@ -43,11 +43,9 @@ RUN mkdir -p $USER_FOLDER/agl
 # Download the agl's "repo" tool:
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > $USER_FOLDER/bin/repo
 RUN chmod a+x $USER_FOLDER/bin/repo
+ENV PATH="$USER_FOLDER/bin:${PATH}"
 
 # Configures image's linux git config:
-# TODO: could be passed also by ARGs during the build.
 RUN git config --global user.email "$GIT_USER_NAME"
 RUN git config --global user.name "$GIT_EMAIL"
-
 WORKDIR $USER_FOLDER/agl
-
