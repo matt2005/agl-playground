@@ -3,7 +3,7 @@ FROM ubuntu:21.04
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/London"
 
-RUN apt-get update && apt-get -y install apt-utils \
+RUN apt-get update && apt-get -y install apt-utils && \
     apt-get -y install gawk wget git-core \
     diffstat unzip texinfo gcc-multilib build-essential \
     chrpath socat cpio python python3 python3-pip \
