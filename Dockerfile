@@ -3,12 +3,13 @@ FROM ubuntu:21.04
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/London"
 
-RUN apt-get update && apt-get -y install apt-utils && \
+RUN apt-get update && apt-get -y upgrade && apt-get -y install apt-utils && \
     apt-get -y install gawk wget git-core \
     diffstat unzip texinfo gcc-multilib build-essential \
     chrpath socat cpio python python3 python3-pip \
     python3-pexpect xz-utils debianutils iputils-ping \
-    libsdl1.2-dev xterm tar locales curl nano  
+    libncurses5-dev libsdl1.2-dev xterm tar locales curl nano \
+    tmux curl dosfstools mtools parted syslinux tree zip
 
 # Set locales:
 RUN locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 \
@@ -16,8 +17,8 @@ RUN locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 \
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
-# User settings. Should be passed using --build-arg when building the image. Otherwise, you can expect accesss errors.
-ARG USER_NAME=yob
+# User settings. Should be passed using --build-arg when building the image. Otherwise, you can expect access errors.
+ARG USER_NAME=yocto
 ARG HOST_UID=1000
 ARG HOST_GID=1000
 ARG GIT_USER_NAME="dummyName"
