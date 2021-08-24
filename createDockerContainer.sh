@@ -18,7 +18,6 @@ then
     rm -rf $PWD/agl
     mkdir -p $PWD/agl
     echo "Running..."
-    wget -N https://github.com/pauloasherring/agl-playground/raw/main/Dockerfile
     sudo docker build \
     --build-arg USER_NAME=$USER \
     --build-arg HOST_UID=`id -u` \
