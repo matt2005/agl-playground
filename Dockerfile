@@ -1,20 +1,9 @@
-FROM ubuntu:16.04
+FROM ubuntu:21.04
 RUN apt-get update && apt-get -y install gawk wget git-core \
     diffstat unzip texinfo gcc-multilib build-essential \
     chrpath socat cpio python python3 python3-pip \
     python3-pexpect xz-utils debianutils iputils-ping \
-    libsdl1.2-dev xterm tar locales curl nano
-
-# Python3.7 or newer is required by AGL but is not available on ubuntu 16.04 repos
-# Get from alternative repo:
-RUN apt-get -y install software-properties-common
-RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get update
-RUN apt-get -y install python3.7
-# Replace current python link with python3.7:
-RUN rm -f /usr/bin/python3
-RUN ln -s /usr/bin/python3.7 /usr/bin/python3
-RUN rm /bin/sh && ln -s bash /bin/sh    
+    libsdl1.2-dev xterm tar locales curl nano  
 
 # Set locales:
 RUN locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 \
