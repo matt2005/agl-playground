@@ -1,5 +1,43 @@
 # agl-playground
 
+## Overview
+
+Setup PVE Container with docker inside it and then build agl inside the docker container
+
+### Prep PVE container with docker
+
+On PVE
+
+```
+pveam download local ubuntu-21.04-standard_21.04-1_amd64.tar.gz
+```
+
+Create container as unprivedged
+
+
+In the container, run the following:
+```
+apt-get update && \
+  apt install curl gnupg2 -y && \
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+  echo 'deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable' >> /etc/apt/sources.list && \
+  apt-get update && \
+  apt-get install docker-ce -y && \
+  apt upgrade -y && \
+  shutdown -h now
+```
+Note the VMID of your container. Then, on your Proxmox host, run the following:
+```
+VMID=113 # Replace this with the VMID of your container
+echo 'features:  keyctl=1,nesting=1' | tee -a "/etc/pve/local/lxc/${VMID}.conf"
+```
+
+When you start your container again, you should be able to successfully run the following command:
+```
+docker run hello-world
+```
+
+
 ### Running your Yocto Build on Docker
 So, now that we’ve got that out of the way, I’ve written a Dockerfile to speed up the process. I’ve brewed this from scratch and it may not be yet fully optimized as I am fairly new to docker.
 Now, to build the image, making adjustments to your git username and e-mail:
