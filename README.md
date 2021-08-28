@@ -14,7 +14,6 @@ pveam download local ubuntu-21.04-standard_21.04-1_amd64.tar.gz
 
 Create container as unprivedged
 
-
 In the container, run the following:
 ```
 apt-get update && \
@@ -24,6 +23,9 @@ apt-get update && \
   apt-get update && \
   apt-get install docker-ce -y && \
   apt upgrade -y && \
+  useradd -m -s /bin/bash build && \
+  usermod -a -G sudo build && \
+  usermod -a -G docker build && \
   shutdown -h now
 ```
 Note the VMID of your container. Then, on your Proxmox host, run the following:
@@ -34,6 +36,7 @@ echo 'features:  keyctl=1,nesting=1' | tee -a "/etc/pve/local/lxc/${VMID}.conf"
 
 When you start your container again, you should be able to successfully run the following command:
 ```
+su - build
 docker run hello-world
 ```
 
@@ -42,15 +45,15 @@ docker run hello-world
 So, now that we’ve got that out of the way, I’ve written a Dockerfile to speed up the process. I’ve brewed this from scratch and it may not be yet fully optimized as I am fairly new to docker.
 Now, to build the image, making adjustments to your git username and e-mail:
 ```
-mkdir ~/agl && cd ~/agl
-wget https://github.com/matt2005/agl-playground/raw/main/Dockerfile
-sudo docker build \
+mkdir ~/aaos && cd ~/aaos
+docker build \
+--target fetch \
 --build-arg USER_NAME=$USER \
 --build-arg HOST_UID=`id -u` \
 --build-arg HOST_GID=`id -g` \
 --build-arg GIT_USER_NAME=yourUserName \
 --build-arg GIT_EMAIL=your@Email.com \
--t agl:latest .
+-t matt/aaos:latest .
 ```
 Failing to adjust your Git credentials might implicate in the following error message:
 ![error](images/1_KAKzl9T2kmLAkDaRu248cg.png)
